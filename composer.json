@@ -1,0 +1,14 @@
+{
+  "name": "vidarl/ibexa-solr-logger",
+  "description": "Extending logger of Solr request",
+  "type": "ibexa-bundle",
+  "homepage": "https://github.com/vidarl/ibexa-solr-logger",
+  "autoload": {
+    "psr-4": {
+      "VidarL\\IbexaSolrLoggerBundle\\": "src/bundle/"
+    }
+  },
+  "require": {
+    "ibexa/solr": "^4.6"
+  }
+}
