@@ -1,0 +1,14 @@
+parameters:
+    env(SOLR_LOGGER_LOG_SUCCESS): 'false'
+    env(SOLR_LOGGER_LOG_ERROR): 'true'
+    solr.logger.log.success: '%env(bool:SOLR_LOGGER_LOG_SUCCESS)%'
+    solr.logger.log.error: '%env(bool:SOLR_LOGGER_LOG_ERROR)%'
+
+services:
+    VidarL\IbexaSolrLoggerBundle\Gateway\HttpClient\Stream:
+        autoconfigure: true
+        decorates: Ibexa\Solr\Gateway\HttpClient\Stream
+        arguments:
+            $inner: '@.inner'
+            $logSuccess: '%solr.logger.log.success%'
+            $logError: '%solr.logger.log.error%'
