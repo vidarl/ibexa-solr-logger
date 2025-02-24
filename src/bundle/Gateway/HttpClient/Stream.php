@@ -33,12 +33,12 @@ class Stream implements HttpClient, LoggerAwareInterface
         try {
             $result = $this->inner->request($method, $endpoint, $path, $message);
             if ($this->logSuccess) {
-                $this->logger->critical("Solr Request succeeded, dumping request information : URL : {$endpoint->getURL()}{$path}, message : " . var_export($message, true));
+                $this->logger->critical("Error in Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, URL size : " . strlen($endpoint->getURL() . $path) . ", Header and Content size (approx) : " . strlen(var_export($message, true)) . ", message : " . var_export($message, true));
             }
             return $result;
         } catch (\Exception $e) {
             if ($this->logError) {
-                $this->logger->critical("Error in Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, message : " . var_export($message, true));
+                $this->logger->critical("Error in Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, URL size : " . strlen($endpoint->getURL() . $path) . ", Header and Content size (approx) : " . strlen(var_export($message, true)) . ", message : " . var_export($message, true));
             }
             throw $e;
         }
