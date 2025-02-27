@@ -23,6 +23,7 @@ class Stream implements HttpClient, LoggerAwareInterface
         readonly HttpClient $inner,
         readonly bool $logSuccess,
         readonly bool $logError,
+        readonly ?string $logToFile,
     )
     {
         $this->setLogger(new NullLogger());
@@ -33,12 +34,22 @@ class Stream implements HttpClient, LoggerAwareInterface
         try {
             $result = $this->inner->request($method, $endpoint, $path, $message);
             if ($this->logSuccess) {
-                $this->logger->critical("Successful Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, URL size : " . strlen($endpoint->getURL() . $path) . ", Header and Content size (approx) : " . strlen(var_export($message, true)) . ", message : " . var_export($message, true));
+                $logMessage = "Successful Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, URL size : " . strlen($endpoint->getURL() . $path) . ", Header and Content size (approx) : " . strlen(var_export($message, true)) . ", message : " . var_export($message, true);
+                if ($this->logToFile === null) {
+                    $this->logger->critical($logMessage);
+                } else {
+                    file_put_contents($this->logToFile, $logMessage . "\n", FILE_APPEND);
+                }
             }
             return $result;
         } catch (\Exception $e) {
             if ($this->logError) {
-                $this->logger->critical("Error in Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, URL size : " . strlen($endpoint->getURL() . $path) . ", Header and Content size (approx) : " . strlen(var_export($message, true)) . ", message : " . var_export($message, true));
+                $logMessage = "Error in Solr Request, dumping request information : URL : {$endpoint->getURL()}{$path}, URL size : " . strlen($endpoint->getURL() . $path) . ", Header and Content size (approx) : " . strlen(var_export($message, true)) . ", message : " . var_export($message, true);
+                if ($this->logToFile === null) {
+                    $this->logger->critical($logMessage);
+                } else {
+                    file_put_contents($this->logToFile, $logMessage . "\n", FILE_APPEND);
+                }
             }
             throw $e;
         }
