@@ -9,6 +9,6 @@
     }
   },
   "require": {
-    "ibexa/solr": "^4.6"
+    "ibexa/solr": ">=4.6"
   }
 }
